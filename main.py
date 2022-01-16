@@ -2,8 +2,8 @@ from random import random
 from matplotlib import pyplot as plt
 
 X = [random() for _ in range(10)]
-Y = [x*2 + 1 for x in X]
-e = 0.01
+Y = [x*10 -4 for x in X]
+e = 0.1
 
 w = random()
 b = random()
@@ -19,11 +19,12 @@ for i in range(1000):
     Er = 0.5*((z-y)**2)
     E.append(Er)
     print(Er)
-    w -= e * x * (w * x + b - y)* Er
-    b -= e * (w * x + b - y) * Er
+    w -= e * x * (z - y)
+    b -= e * (z - y)
     W.append(w)
     B.append(b)
     print(w, b)
+    print()
 
 plt.plot(W)
 plt.plot(B)
