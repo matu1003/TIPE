@@ -1,0 +1,104 @@
+\documentclass[10pt,a4paper,titlepage]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\title{Les Réseaux de Neurones}
+\author{Philibert PAPPENS, Tristan POIDATZ, Mathurin PETIT}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Définitions}
+\subsection{Neurone}
+Un Neurone est une représentation mathématique et informatique d'un neurone biologique. Il contient en général plusieurs entrées et une seule sortie.
+Mathématiquement, un neurone est une fonction à plusieurs variables et à valeurs réelles.
+
+\subsection{Réseau de Neurones}
+Un réseau de Neurones est une association de neurones pour accomplir des tâches arbitrairement complexes.
+
+\subsection{Fonction d'activation}
+Une fonction d'activation (souvent notée $\sigma$) est une fonction de $\mathbb{R^R}$ dont son calcul et celui de sa dérivée est peu couteux en temps. Choisir des fonctions d'activations non-linéaires permet au réseau de créer des comportements plus complexes.
+
+\section{Notations}
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{Réseau.jpeg}
+	\caption{Réseau simple à trois couches}
+	\label{fig:Réseau}
+\end{figure}
+
+\subsection{Poids}
+\[w_{i,j}^{\ell}\] est le poids reliant le neurone $i$ de la couche $\ell$ au neurone $j$ de la couche $\ell+1$
+
+\subsection{Activation intermédiaire}
+\[z_{i}^\ell\] est la valeur de la somme pondérée avant passage dans la fonction d'activation.
+
+\subsection{Biais}
+\[b_{i}^\ell\] est la valeur du biais $i$ de la couche $l$.
+
+\subsection{Fonction d'activation}
+\[\sigma^{\ell}:\] est la fonction d'activation permettant de passer de la couche $\ell - 1$ à la couche $\ell$.
+
+\subsection{Activation}
+\[a_{i}^\ell\] est la valeur du neurone $i$ de la couche $\ell$. Elle vaut $\sigma(z_{i}^\ell)$
+
+\subsection{Matrice d'activation}
+\begin{align*}
+A_\ell =
+\begin{pmatrix} a_1^\ell & a_2^\ell & ... & a_n^\ell
+\end{pmatrix}
+\end{align*}
+
+\subsection{Matrice d'activations intermédiaires}
+\begin{align*}
+Z_\ell =
+\begin{pmatrix} z_1^\ell & z_2^\ell & ... & z_n^\ell
+\end{pmatrix}
+\end{align*}
+
+\subsection{Matrice des poids}
+\begin{align*}
+W_{\ell} =
+\begin{pmatrix} w_{1, 1}^\ell & w_{1,2}^\ell & ... & w_{1,k}^\ell \\ 
+w_{2,1}^\ell & w_{2,2}^\ell & ... & w_{2,k}^\ell \\
+... & ... & ... & ... \\
+w_{n,1}^\ell & w_{n,2}^\ell & ... & w_{n,k}^\ell
+\end{pmatrix}
+\end{align*}
+Où $n$ est le nombre de neurones dans la couche $\ell$ et $k$ dans la couche $\ell+1$
+
+\subsection{Matrice gradient}
+Pour une matrice $M_{\ell}$, on note $\nabla_M^{\ell}$ la matrice des dérivées partielles par rapport a chacun des coefficients.
+Par exemple: 
+\[\nabla_A^{\ell} = \begin{pmatrix} \frac{\partial}{\partial a_1^\ell} & \frac{\partial}{\partial a_2^\ell} & ... & \frac{\partial}{\partial a_n^\ell} \end{pmatrix}\]
+
+\subsection{Matrice $\delta$}
+On pose $\delta^{\ell} = \nabla_Z^{\ell}C$
+
+\subsection{Produit de Hadamard}
+L'operateur $\odot$ permet de definir le produit de Hadamard: le produit matriciel terme a terme:
+\begin{align*}
+\begin{pmatrix} a_{1,1} & a_{1,2} \\
+a_{2,1} & a_{2,2}
+\end{pmatrix}
+\odot
+\begin{pmatrix} b_{1,1} & b_{1,2} \\
+b_{2,1} & b_{2,2}
+\end{pmatrix}=
+\begin{pmatrix} a_{1,1} \cdot b_{1,1} & a_{1,2} \cdot b_{1,2} \\
+a_{2,1} \cdot b_{2,1} & a_{2,2} \cdot b_{2,2}
+\end{pmatrix}
+\end{align*}
+
+\end{document}
+
+
+
+
+
+
+
+
+
