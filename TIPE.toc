@@ -14,3 +14,8 @@
 \contentsline {subsection}{\numberline {2.9}Matrice gradient}{3}{}%
 \contentsline {subsection}{\numberline {2.10}Matrice $\delta $}{3}{}%
 \contentsline {subsection}{\numberline {2.11}Produit de Hadamard}{3}{}%
+\contentsline {section}{\numberline {3}Formules de propagation}{3}{}%
+\contentsline {subsection}{\numberline {3.1}Propagation avant}{3}{}%
+\contentsline {subsection}{\numberline {3.2}Propagation arri^^c3^^a8re}{4}{}%
+\contentsline {section}{\numberline {4}Descente de gradient}{5}{}%
+\contentsline {subsection}{\numberline {4.1}Principe}{5}{}%

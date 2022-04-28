@@ -7,6 +7,7 @@
 \usepackage{float}
 \title{Les Réseaux de Neurones}
 \author{Philibert PAPPENS, Tristan POIDATZ, Mathurin PETIT}
+\date{2021-2022}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -33,7 +34,12 @@ Une fonction d'activation (souvent notée $\sigma$) est une fonction de $\mathbb
 \[w_{i,j}^{\ell}\] est le poids reliant le neurone $i$ de la couche $\ell$ au neurone $j$ de la couche $\ell+1$
 
 \subsection{Activation intermédiaire}
-\[z_{i}^\ell\] est la valeur de la somme pondérée avant passage dans la fonction d'activation.
+Considérons une couche $\ell \in \mathbb{N}$ d'un réseau. Notons $n$ le nombre de neurones dans la couche $\ell$.
+Pour le neurone $i$ de la couche $\ell+1$, on définit sa valeur d'activation intermédiaire:
+\begin{equation} 
+\label{eq:1}
+z_{i}^{\ell+1} = \sum_{k=1}^n{w_{k,i}^{\ell}a_k^{\ell}}
+\end{equation}
 
 \subsection{Biais}
 \[b_{i}^\ell\] est la valeur du biais $i$ de la couche $l$.
@@ -91,6 +97,93 @@ b_{2,1} & b_{2,2}
 a_{2,1} \cdot b_{2,1} & a_{2,2} \cdot b_{2,2}
 \end{pmatrix}
 \end{align*}
+
+\section{Formules de propagation}
+\subsection{Propagation avant}
+L'équation \eqref{eq:1} et la définition de $Z_{\ell}$ peuvent être mises sous forme matricielle pour donner:
+\begin{equation}
+\label{fp1}
+Z_{\ell+1}= A_\ell \cdot W_\ell+B_{\ell+1}
+\end{equation}
+\begin{equation}
+\label{fp2}
+A_{\ell+1}= \sigma(Z_{\ell+1})
+\end{equation}
+
+\subsection{Propagation arrière}
+Par le théorème de dérivation des fonctions composées, on a:
+
+\[\frac{\partial C}{\partial z_j^\ell}=\frac{\partial C}{\partial a_j^\ell} \cdot \frac{\partial a_j^\ell}{\partial z_j^\ell}=\frac{\partial C}{\partial a_j^\ell} \sigma'(z_j^\ell)\]
+
+Ce qui permet d'obtenir une première equation de rétro-propagation:
+\begin{equation}
+\label{bp1}
+\delta^\ell=\nabla_a^\ell C \odot \sigma'(Z_\ell)
+\end{equation}
+
+Puis,
+\begin{equation}
+\label{bp2}
+\nabla_a^{\ell} C = \delta^{\ell+1} \cdot (W_\ell)^T 
+\end{equation}
+
+Les equations \eqref{bp1} et \eqref{bp2} permettent d'établir une relation de récurrence descendante sur la suite $(\delta^{\ell})_{\ell \in \mathbb{N}}$:
+
+\begin{equation}
+\delta^{\ell} = (\delta^{\ell+1} \cdot (W_\ell)^T) \odot \sigma'(Z_\ell)
+\end{equation}
+
+En appliquant une seconde fois ce théorème, on effectue le calcul matriciel suivant:
+\begin{align*}
+\nabla_w^\ell C &= \begin{pmatrix} \frac{\partial C}{\partial w_{1, 1}^\ell} & \frac{\partial C}{\partial w_{1,2}^\ell} & ... & \frac{\partial C}{\partial w_{1,k}^\ell} \\ \frac{\nabla C}{\partial w_{2,1}^{\ell}} & \frac{\partial C}{\partial w_{2,2}^{\ell}} & ... & \frac{\partial C}{\partial w_{2,k}^{\ell}} \\
+... & ... & ... & ... \\
+\frac{\partial C}{\partial w_{n,1}^\ell} & \frac{\partial C}{\partial w_{n,2}\ell} & ... & \frac{\partial C}{\partial w_{n,k}\ell}
+\end{pmatrix} \\
+&=\begin{pmatrix} \frac{\partial C}{\partial z_1^{\ell+1}} \cdot \frac{\partial z_1^{\ell+1}}{\partial w_{1, 1}^\ell} & \frac{\partial C}{\partial z_2^{\ell+1}} \cdot \frac{\partial z_2^{\ell+1}}{\partial w_{1, 2}^\ell} & ... & \frac{\partial C}{\partial z_k^{\ell+1}} \cdot \frac{\partial z_k^{\ell+1}}{\partial w_{1, k}^\ell} \\ 
+\frac{\partial C}{\partial z_1^{\ell+1}} \cdot \frac{\partial z_1^{\ell+1}}{\partial w_{2, 1}^\ell} & \frac{\partial C}{\partial z_2^{\ell+1}} \cdot \frac{\partial z_2^{\ell+1}}{\partial w_{2, 2}^\ell} & ... & \frac{\partial C}{\partial a_k^{\ell+1}} \cdot \frac{\partial z_k^{\ell+1}}{\partial w_{2, k}^\ell} \\
+... & ... & ... & ... \\
+\frac{\partial C}{\partial z_1^{\ell+1}} \cdot \frac{\partial z_1^{\ell+1}}{\partial w_{n, 1}^\ell} & \frac{\partial C}{\partial z_2^{\ell+1}} \cdot \frac{\partial z_2^{\ell+1}}{\partial w_{n, 2}^\ell} & ... & \frac{\partial C}{\partial z_k^{\ell+1}} \cdot \frac{\partial z_k^{\ell+1}}{\partial w_{n, k}^\ell}
+\end{pmatrix} \\
+&=\begin{pmatrix}
+\nabla_z^{\ell+1}C \cdot a_1^\ell \\
+\nabla_z^{\ell+1}C \cdot a_2^\ell \\
+... \\
+\nabla_z^{\ell+1}C \cdot a_n^\ell
+\end{pmatrix} \\
+&=\begin{pmatrix}
+\delta^{\ell+1} \cdot a_1^\ell \\
+\delta^{\ell+1} \cdot a_2^\ell \\
+... \\
+\delta^{\ell+1} \cdot a_n^\ell
+\end{pmatrix} \\
+&= \begin{pmatrix}
+\delta^{\ell+1}\\
+\delta^{\ell+1}\\
+... \\
+\delta^{\ell + 1}
+\end{pmatrix} \odot (A_\ell)^T
+\end{align*}
+
+On obtient ainsi:
+\begin{equation}
+\label{bp3}
+\nabla_w^\ell C = \begin{pmatrix}
+\delta^{\ell+1}\\
+\delta^{\ell+1}\\
+... \\
+\delta^{\ell + 1}
+\end{pmatrix} \odot (A_\ell)^T
+\end{equation}
+
+Par un calcul analogue, on obtient:
+\begin{equation}
+\label{bp4}
+\nabla_b^\ell C = \delta^{\ell}
+\end{equation}
+
+\section{Descente de gradient}
+\subsection{Principe}
+
 
 \end{document}
 
